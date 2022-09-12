@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/board.css}"
+          href="css/board.css" rel="stylesheet">
+    <title>Title</title>
+
+</head>
+<body>
+<section class="notice">
+    <div class="page-title">
+        <div class="container">
+            <h3><b>게시물 작성</b></h3>
+        </div>
+    </div>
+
+    <div id="board-list">
+        <div class="container">
+            <form action="post.html" th:action method="post">
+                <table class="board-table">
+                    <tr>
+                        <th>제목</th>
+                        <td><input type="text" id="title" name="title" style="width: 816px" class="form-control"
+                                   th:value="${post.title}" readonly></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td><textarea class="form-control" cols="100" rows="30" name="content" id="content" readonly>[[${post.content}]]</textarea>
+                        </td>
+                    </tr>
+                </table>
+
+                <div id="board-button" style="margin-top: 20px">
+                    <div class="container">
+                        <input class="btn btn-dark btn-cancel" type="button"
+                               th:onclick="|location.href='@{/boards}'|"
+                               onclick="location.href='boards.html'" value="목록으로">
+                        <input class="btn btn-dark btn-add" type="button"
+                               th:onclick="|location.href='@{/boards/{postId}/edit(postId=${post.id})}'|"
+                               onclick="location.href='editPost.html'" value="수정">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

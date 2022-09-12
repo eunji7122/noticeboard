@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/board.css}"
+          href="css/board.css" rel="stylesheet">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#selectAll").change(function () {
+                $("input:checkbox").prop('checked', $(this).prop("checked"));
+            });
+        });
+    </script>
+</head>
+<body>
+
+<section class="notice">
+    <div class="page-title">
+        <div class="container">
+            <h3><b>게시물</b></h3>
+        </div>
+    </div>
+
+    <!-- board search area -->
+    <div id="board-search">
+        <div class="container">
+            <div class="search-window">
+                <form action="">
+                    <div class="search-wrap">
+                        <label for="search" class="blind">공지사항 내용 검색</label>
+                        <input id="search" type="search" name="" placeholder="검색어를 입력해주세요." value="">
+                        <button type="submit" class="btn btn-dark">검색</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <form action="/boards/delete" method="post">
+        <!-- board list area -->
+        <div id="board-list">
+            <div class="container">
+                <table class="board-table">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="th-num"><input id="selectAll" type="checkbox"></th>
+                        <th scope="col" class="th-num">번호</th>
+                        <th scope="col" class="th-title">제목</th>
+                        <th scope="col" class="th-date">등록일</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="post : ${posts}">
+                        <td>
+                            <input type="checkbox" id="checkbox-list" name="checkbox-list" th:value="${post.id}">
+                        </td>
+                        <td><a href="post.html" th:href="@{/boards/{boardId}(boardId=${post.id})}"
+                               th:text="${post.id}"></a></td>
+                        <td><a href="post.html" th:href="@{/boards/{boardId}(boardId=${post.id})}"
+                               th:text="${post.title}"></a></td>
+                        <td th:text="${post.registrationDate}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="board-button">
+            <div class="container">
+                <button type=submit class="btn btn-dark btn-cancel">삭제</button>
+                <button type="button" class="btn btn-dark btn-add"
+                        onclick="location.href='addPost.html'"
+                        th:onclick="|location.href='@{/boards/add}'|">등록
+                </button>
+            </div>
+        </div>
+    </form>
+
+</section>
+</body>
+</html>
