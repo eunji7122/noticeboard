@@ -1,7 +1,9 @@
 package com.project.noticeboard.web.post;
 
+import com.project.noticeboard.Repository.post.PostSearchCond;
+import com.project.noticeboard.Repository.post.PostUpdateDto;
 import com.project.noticeboard.domain.post.Post;
-import com.project.noticeboard.domain.post.PostRepository;
+import com.project.noticeboard.service.post.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -9,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -19,24 +19,18 @@ import java.util.List;
 @RequestMapping("/boards")
 public class PostController {
 
-    private final PostRepository postRepository;
-
-    @PostConstruct
-    public void init() {
-        postRepository.save(new Post("titleA", "contentA", LocalDate.now()));
-        postRepository.save(new Post("titleB", "contentB", LocalDate.now()));
-    }
+    private final PostServiceImpl postService;
 
     @GetMapping
-    public String boards(Model model) {
-        List<Post> posts = postRepository.findAll();
+    public String boards(@ModelAttribute("postSearch")PostSearchCond postSearch, Model model) {
+        List<Post> posts = postService.findPosts(postSearch);
         model.addAttribute("posts", posts);
         return "boards";
     }
 
     @GetMapping("/{postId}")
     public String post(@PathVariable Long postId, Model model) {
-        Post post = postRepository.findById(postId);
+        Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         return "post";
     }
@@ -48,21 +42,21 @@ public class PostController {
 
     @PostMapping("/add")
     public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
-        Post savedPost = postRepository.save(post);
+        Post savedPost = postService.save(post);
         redirectAttributes.addAttribute("postId", savedPost.getId());
         return "redirect:/boards";
     }
 
     @GetMapping("/{postId}/edit")
-    public String editForm(@PathVariable Long postId, Model model) {
-        Post post = postRepository.findById(postId);
+    public String editPost(@PathVariable Long postId, Model model) {
+        Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         return "editPost";
     }
 
     @PostMapping("/{postId}/edit")
-    public String edit(@PathVariable Long postId, @ModelAttribute Post post) {
-        postRepository.update(postId, post);
+    public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
+        postService.update(postId, updateParam);
         return "redirect:/boards/{postId}";
     }
 
@@ -70,7 +64,7 @@ public class PostController {
     public String deletePost(@RequestParam(value = "checkbox-list", required = false) Long[] checkboxList) {
         if (checkboxList != null) {
             for (Long value : checkboxList)
-                postRepository.delete(value);
+                postService.delete(value);
         }
         return "redirect:/boards";
     }
