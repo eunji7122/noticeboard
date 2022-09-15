@@ -1,6 +1,8 @@
 package com.project.noticeboard.Repository.post;
 
 import com.project.noticeboard.domain.post.Post;
+import com.project.noticeboard.domain.post.PostSearchCond;
+import com.project.noticeboard.domain.post.PostUpdateDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;

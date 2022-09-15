@@ -1,7 +1,7 @@
 package com.project.noticeboard.web.post;
 
-import com.project.noticeboard.Repository.post.PostSearchCond;
-import com.project.noticeboard.Repository.post.PostUpdateDto;
+import com.project.noticeboard.domain.post.PostSearchCond;
+import com.project.noticeboard.domain.post.PostUpdateDto;
 import com.project.noticeboard.domain.post.Post;
 import com.project.noticeboard.service.post.PostServiceImpl;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.project.noticeboard.Repository.post;
+package com.project.noticeboard.domain.post;
 
 import lombok.Data;
 
