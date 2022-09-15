@@ -24,6 +24,7 @@ section.notice {
 }
 
 #board-search .search-window .search-wrap {
+    /*float: right;*/
     position: relative;
     /*   padding-right: 124px; */
     margin: 0 auto;
@@ -199,4 +200,9 @@ section.notice {
     margin: -1px;
     width: 1px;
     height: 1px;
+}
+
+.top-container {
+    text-align: center;
+    margin-left: 1050px;
 }

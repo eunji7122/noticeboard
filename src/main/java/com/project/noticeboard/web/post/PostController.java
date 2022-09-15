@@ -22,7 +22,7 @@ public class PostController {
     private final PostServiceImpl postService;
 
     @GetMapping
-    public String boards(@ModelAttribute("postSearch")PostSearchCond postSearch, Model model) {
+    public String boards(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
         List<Post> posts = postService.findPosts(postSearch);
         model.addAttribute("posts", posts);
         return "boards";

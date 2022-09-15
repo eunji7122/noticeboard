@@ -21,15 +21,13 @@ public class QPost extends EntityPathBase<Post> {
 
     public final StringPath content = createString("content");
 
-    public final StringPath email = createString("email");
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final StringPath password = createString("password");
 
     public final DatePath<java.time.LocalDate> registrationDate = createDate("registrationDate", java.time.LocalDate.class);
 
     public final StringPath title = createString("title");
+
+    public final StringPath username = createString("username");
 
     public QPost(String variable) {
         super(Post.class, forVariable(variable));

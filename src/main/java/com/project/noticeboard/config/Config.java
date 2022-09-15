@@ -1,7 +1,11 @@
 package com.project.noticeboard.config;
 
+import com.project.noticeboard.Repository.member.MemberRepository;
+import com.project.noticeboard.Repository.member.MemberRepositoryImpl;
 import com.project.noticeboard.Repository.post.PostRepository;
 import com.project.noticeboard.Repository.post.PostRepositoryImpl;
+import com.project.noticeboard.service.member.MemberService;
+import com.project.noticeboard.service.member.MemberServiceImpl;
 import com.project.noticeboard.service.post.PostService;
 import com.project.noticeboard.service.post.PostServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -26,5 +30,15 @@ public class Config {
     @Bean
     public PostRepositoryImpl postRepository() {
         return new PostRepository(em);
+    }
+
+    @Bean
+    public MemberServiceImpl memberService() {
+        return new MemberService(memberRepository());
+    }
+
+    @Bean
+    public MemberRepositoryImpl memberRepository() {
+        return new MemberRepository(em);
     }
 }

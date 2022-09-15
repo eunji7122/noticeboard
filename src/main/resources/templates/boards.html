@@ -15,8 +15,11 @@
     </script>
 </head>
 <body>
-
 <section class="notice">
+    <div class="top-container">
+        <a th:href="@{/login}">로그인</a>
+    </div>
+
     <div class="page-title">
         <div class="container">
             <h3><b>게시물</b></h3>
@@ -24,19 +27,21 @@
     </div>
 
     <!-- board search area -->
-    <div id="board-search">
-        <div class="container">
-            <div class="search-window">
-                <form action="">
-                    <div class="search-wrap">
-                        <label for="search" class="blind">공지사항 내용 검색</label>
-                        <input id="search" type="search" name="" placeholder="검색어를 입력해주세요." value="">
-                        <button type="submit" class="btn btn-dark">검색</button>
-                    </div>
-                </form>
+    <form th:object="${postSearch}" method="get">
+        <div id="board-search">
+            <div class="container">
+                <div class="search-window">
+                    <form action="">
+                        <div class="search-wrap">
+                            <label for="search" class="blind">공지사항 내용 검색</label>
+                            <input id="search" type="search" name="" th:field="*{title}" placeholder="검색어를 입력해주세요.">
+                            <button type="submit" class="btn btn-dark">검색</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 
     <form action="/boards/delete" method="post">
         <!-- board list area -->
@@ -48,6 +53,7 @@
                         <th scope="col" class="th-num"><input id="selectAll" type="checkbox"></th>
                         <th scope="col" class="th-num">번호</th>
                         <th scope="col" class="th-title">제목</th>
+                        <th scope="col" class="th-username">글쓴이</th>
                         <th scope="col" class="th-date">등록일</th>
                     </tr>
                     </thead>
@@ -61,6 +67,8 @@
                                th:text="${post.id}"></a></td>
                         <td><a href="post.html" th:href="@{/boards/{boardId}(boardId=${post.id})}"
                                th:text="${post.title}"></a></td>
+                        <td><a href="post.html" th:href="@{/boards/{boardId}(boardId=${post.id})}"
+                               th:text="${post.username}"></a></td>
                         <td th:text="${post.registrationDate}"></td>
                     </tr>
                     </tbody>
