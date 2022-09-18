@@ -21,7 +21,7 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @GetMapping("/signup")
-    public String signupForm() {
+    public String signupForm(@ModelAttribute("member") Member member) {
         return "signup";
     }
 

@@ -21,7 +21,7 @@ public class AuthController {
     private final AuthService authService;
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@ModelAttribute("memberLoginDto") MemberLoginDto form) {
         return "login";
     }
 

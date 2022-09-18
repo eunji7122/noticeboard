@@ -24,6 +24,11 @@
         .sign {
             margin-left: 20px;
         }
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -32,14 +37,22 @@
     <div class="py-5 text-center title">
         <h2>로그인</h2>
     </div>
-    <form th:action  method="post">
+    <form th:action th:object="${memberLoginDto}" method="post">
         <div>
             <label for="email"></label>
-            <input type="text" id="email" name="email" class="form-control" placeholder="Email">
+            <input type="text" id="email" name="email" th:field="*{email}"
+                   class="form-control" placeholder="Email" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{email}" />
         </div>
         <div>
             <label for="password"></label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Password">
+            <input type="password" id="password" name="password" th:field="*{password}"
+                   class="form-control" placeholder="Password" th:errorclass="field-error">
+            <div class="field-error" th:errors="*{password}"/>
+        </div>
+        <div th:if="${#fields.hasGlobalErrors()}" >
+            <p class="field-error" th:each="err : ${#fields.globalErrors()}"
+               th:text="${err}">전체 오류 메시지</p>
         </div>
         <button class="w-100 btn btn-secondary btn-lg" style="margin-top: 20px" type="submit">
             로그인

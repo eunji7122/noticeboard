@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static com.project.noticeboard.domain.member.QMember.member;
@@ -38,11 +39,13 @@ public class MemberRepository implements MemberRepositoryImpl{
 
     @Override
     public Optional<Member> findByEmail(String email) {
-        Member findMember = query.select(member)
+        List<Member> findMember = query.select(member)
                 .from(member)
                 .where(member.email.like(email))
-                .fetch()
-                .get(0);
-        return Optional.ofNullable(findMember);
+                .fetch();
+        if (findMember.size() != 0) {
+            return Optional.ofNullable(findMember.get(0));
+        }
+        return Optional.empty();
     }
 }
