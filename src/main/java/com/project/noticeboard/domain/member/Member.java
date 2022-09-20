@@ -4,6 +4,8 @@ import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @Entity
@@ -13,23 +15,23 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotBlank
     private String email;
 
-    @NotNull
+    @NotBlank
     private String password;
 
-    @NotNull
+    @NotBlank
     private String username;
 
-    @NotNull
+    @NotBlank
     @Column(name = "phone_number")
-    private int phoneNumber;
+    private String phoneNumber;
 
     public Member() {
     }
 
-    public Member(Long id, String email, String password, String username, int phoneNumber) {
+    public Member(Long id, String email, String password, String username, String phoneNumber) {
         this.id = id;
         this.email = email;
         this.password = password;

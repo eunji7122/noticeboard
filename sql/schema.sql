@@ -16,6 +16,6 @@ create table member
     email varchar,
     password varchar,
     username varchar,
-    phone_number int,
+    phone_number varchar,
     primary key (id)
 )

@@ -29,6 +29,7 @@ public class MemberController {
     public String signupPost(@Valid @ModelAttribute Member member,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
+            bindingResult.reject("signupFail", "정보를 입력해 주세요.");
             return "/signup";
         }
 
