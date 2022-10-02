@@ -203,6 +203,7 @@ section.notice {
 }
 
 .top-container {
+    display: flex;
     text-align: center;
-    margin-left: 1050px;
+    margin-left: 1100px;
 }

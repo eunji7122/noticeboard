@@ -1,11 +1,16 @@
 package com.project.noticeboard.web.post;
 
+import com.project.noticeboard.domain.auth.PrincipalDetails;
+import com.project.noticeboard.domain.member.Member;
 import com.project.noticeboard.domain.post.PostSearchCond;
 import com.project.noticeboard.domain.post.PostUpdateDto;
 import com.project.noticeboard.domain.post.Post;
 import com.project.noticeboard.service.post.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +46,9 @@ public class PostController {
     }
 
     @PostMapping("/add")
-    public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
+    public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        var member = principalDetails.getMember();
+        post.setMember(member);
         Post savedPost = postService.save(post);
         redirectAttributes.addAttribute("postId", savedPost.getId());
         return "redirect:/boards";

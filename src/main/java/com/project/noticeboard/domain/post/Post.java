@@ -1,5 +1,6 @@
 package com.project.noticeboard.domain.post;
 
+import com.project.noticeboard.domain.member.Member;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +15,10 @@ public class Post {
     private Long id;
     @Column(name = "registration_date")
     private LocalDate registrationDate;
-    private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "member")
+    private Member member;
     private String title;
     private String content;
 

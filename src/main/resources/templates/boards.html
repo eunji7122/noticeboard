@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/board.css}"
@@ -16,8 +17,13 @@
 </head>
 <body>
 <section class="notice">
-    <div class="top-container">
-        <a th:href="@{/login}">로그인</a>
+    <div sec:authorize="isAnonymous()" class="top-container">
+        <a th:href="@{/auth/login}">로그인</a>
+    </div>
+
+    <div sec:authorize="isAuthenticated()" class="top-container">
+        <p sec:authentication="name" style="margin-right: 20px"></p>
+        <a th:href="@{/auth/logout}">로그아웃</a>
     </div>
 
     <div class="page-title">
@@ -68,7 +74,7 @@
                         <td><a href="post.html" th:href="@{/boards/{boardId}(boardId=${post.id})}"
                                th:text="${post.title}"></a></td>
                         <td><a href="post.html" th:href="@{/boards/{boardId}(boardId=${post.id})}"
-                               th:text="${post.username}"></a></td>
+                               th:text="${post.member.username}"></a></td>
                         <td th:text="${post.registrationDate}"></td>
                     </tr>
                     </tbody>
