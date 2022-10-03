@@ -6,7 +6,9 @@ import com.project.noticeboard.web.session.SessionManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -67,6 +70,19 @@ public class AuthController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/auth/login";
+    }
+
+    @GetMapping("/oauth/login")
+    public String oauth2Login(Authentication authentication, @AuthenticationPrincipal OAuth2User oAuth2UserPrincipal) {
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        System.out.println(attributes);
+        // PrincipalOauth2UserService의 getAttributes내용과 같음
+
+        Map<String, Object> attributes1 = oAuth2UserPrincipal.getAttributes();
+        // attributes == attributes1
+
+        return attributes.toString();
     }
 
 }

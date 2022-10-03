@@ -1,6 +1,6 @@
 package com.project.noticeboard.config;
 
-import com.project.noticeboard.config.auth.CustomAuthFailureHandler;
+import com.project.noticeboard.service.auth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationFailureHandler customFailureHandler;
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     private static final String[] AUTH_WHITELIST = {
             "/v2/api-docs",
@@ -64,7 +65,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .logout()
                     .logoutUrl("/auth/logout")
-                    .logoutSuccessUrl("/auth/login");
+                    .logoutSuccessUrl("/auth/login")
+                .and()
+                    .oauth2Login()
+                    .defaultSuccessUrl("/")
+                    .failureUrl("/oauth/failed")
+                    .userInfoEndpoint()
+                    .userService(principalOauth2UserService);
 
     }
 
@@ -76,11 +83,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
-
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
