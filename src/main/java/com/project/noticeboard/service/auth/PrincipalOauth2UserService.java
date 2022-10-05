@@ -1,6 +1,9 @@
 package com.project.noticeboard.service.auth;
 
 import com.project.noticeboard.Repository.member.MemberRepositoryImpl;
+import com.project.noticeboard.domain.auth.GoogleUserInfo;
+import com.project.noticeboard.domain.auth.NaverUserInfo;
+import com.project.noticeboard.domain.auth.OAuth2UserInfo;
 import com.project.noticeboard.domain.auth.PrincipalDetails;
 import com.project.noticeboard.domain.member.Member;
 import com.project.noticeboard.domain.member.Role;
@@ -27,14 +30,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        OAuth2UserInfo oAuth2UserInfo = null;
         String provider = userRequest.getClientRegistration().getRegistrationId();
-        String providerId = oAuth2User.getAttribute("sub");
+
+        if(provider.equals("google")){
+            oAuth2UserInfo = new GoogleUserInfo(oAuth2User.getAttributes());
+        }
+        else if(provider.equals("naver")){
+            oAuth2UserInfo = new NaverUserInfo(oAuth2User.getAttributes());
+        }
+
+        String providerId = oAuth2UserInfo.getProviderId();
         String username = provider + "_" + providerId;
 
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         String password = bCryptPasswordEncoder.encode("패스워드"+uuid);  // 사용자가 입력한 적은 없지만 만들어준다
 
-        String email = oAuth2User.getAttribute("email");
+        String email = oAuth2UserInfo.getEmail();
         Role role = Role.USER;
 
         Optional<Member> findMember = memberRepository.findByEmail(email);
@@ -49,6 +61,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             memberRepository.save(findMember.get());
         }
 
-        return new PrincipalDetails(findMember.get(), oAuth2User.getAttributes());
+        return new PrincipalDetails(findMember.get(), oAuth2UserInfo);
     }
 }

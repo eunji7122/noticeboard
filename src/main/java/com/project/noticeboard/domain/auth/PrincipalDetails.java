@@ -16,7 +16,7 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private Member member;
-    private Map<String, Object> attributes;
+    private OAuth2UserInfo oAuth2UserInfo;
 
     // Form 로그인 시 사용
     public PrincipalDetails(Member member) {
@@ -24,9 +24,9 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
 
     // OAuth2 로그인 시 사용
-    public PrincipalDetails(Member member, Map<String, Object> attributes) {
+    public PrincipalDetails(Member member, OAuth2UserInfo oAuth2UserInfo) {
         this.member = member;
-        this.attributes = attributes;
+        this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
     @Override
@@ -74,11 +74,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return attributes.get("sub").toString();
+        return oAuth2UserInfo.getProviderId();
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return oAuth2UserInfo.getAttributes();
     }
 }
