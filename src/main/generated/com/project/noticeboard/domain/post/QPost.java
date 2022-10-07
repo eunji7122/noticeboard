@@ -22,6 +22,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
+    public final ListPath<com.project.noticeboard.domain.comment.Comment, com.project.noticeboard.domain.comment.QComment> comments = this.<com.project.noticeboard.domain.comment.Comment, com.project.noticeboard.domain.comment.QComment>createList("comments", com.project.noticeboard.domain.comment.Comment.class, com.project.noticeboard.domain.comment.QComment.class, PathInits.DIRECT2);
+
     public final StringPath content = createString("content");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);

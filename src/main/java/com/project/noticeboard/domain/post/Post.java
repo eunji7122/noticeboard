@@ -1,10 +1,12 @@
 package com.project.noticeboard.domain.post;
 
+import com.project.noticeboard.domain.comment.Comment;
 import com.project.noticeboard.domain.member.Member;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -21,6 +23,10 @@ public class Post {
     private Member member;
     private String title;
     private String content;
+
+    @OneToMany
+    @JoinColumn(name = "comment")
+    private List<Comment> comments;
 
     public Post() {
     }

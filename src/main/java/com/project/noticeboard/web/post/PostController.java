@@ -1,22 +1,24 @@
 package com.project.noticeboard.web.post;
 
 import com.project.noticeboard.domain.auth.PrincipalDetails;
+import com.project.noticeboard.domain.comment.Comment;
 import com.project.noticeboard.domain.member.Member;
 import com.project.noticeboard.domain.post.PostSearchCond;
 import com.project.noticeboard.domain.post.PostUpdateDto;
 import com.project.noticeboard.domain.post.Post;
-import com.project.noticeboard.service.post.PostServiceImpl;
+import com.project.noticeboard.service.comment.CommentService;
+import com.project.noticeboard.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -24,7 +26,8 @@ import java.util.List;
 @RequestMapping("/boards")
 public class PostController {
 
-    private final PostServiceImpl postService;
+    private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping
     public String boards(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
@@ -37,6 +40,9 @@ public class PostController {
     public String post(@PathVariable Long postId, Model model) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
+
+        List<Comment> comments = commentService.findComments(postId);
+        model.addAttribute("comments", comments);
         return "post";
     }
 
@@ -55,8 +61,14 @@ public class PostController {
     }
 
     @GetMapping("/{postId}/edit")
-    public String editPost(@PathVariable Long postId, Model model) {
+    public String editPost(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         Post post = postService.findById(postId).get();
+        Member member = principalDetails.getMember();
+
+        if (!Objects.equals(member.getEmail(), post.getMember().getEmail())) {
+            return "redirect:/boards/{postId}";
+        }
+
         model.addAttribute("post", post);
         return "editPost";
     }
@@ -74,6 +86,16 @@ public class PostController {
                 postService.delete(value);
         }
         return "redirect:/boards";
+    }
+
+    @PostMapping("/{postId}/comment/add")
+    public String addComment(@PathVariable Long postId, @ModelAttribute Comment comment, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Member member = principalDetails.getMember();
+        Optional<Post> post = postService.findById(postId);
+        comment.setPost(post.get());
+        comment.setMember(member);
+        commentService.save(comment);
+        return "redirect:/boards/{postId}";
     }
 
 }

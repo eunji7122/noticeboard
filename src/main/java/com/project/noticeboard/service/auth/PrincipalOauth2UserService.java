@@ -1,6 +1,6 @@
 package com.project.noticeboard.service.auth;
 
-import com.project.noticeboard.Repository.member.MemberRepositoryImpl;
+import com.project.noticeboard.Repository.member.MemberRepository;
 import com.project.noticeboard.domain.auth.GoogleUserInfo;
 import com.project.noticeboard.domain.auth.NaverUserInfo;
 import com.project.noticeboard.domain.auth.OAuth2UserInfo;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberRepositoryImpl memberRepository;
+    private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override

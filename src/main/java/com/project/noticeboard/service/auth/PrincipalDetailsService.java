@@ -1,6 +1,6 @@
 package com.project.noticeboard.service.auth;
 
-import com.project.noticeboard.Repository.member.MemberRepositoryImpl;
+import com.project.noticeboard.Repository.member.MemberRepository;
 import com.project.noticeboard.domain.auth.PrincipalDetails;
 import com.project.noticeboard.domain.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PrincipalDetailsService implements UserDetailsService {
 
-    private final MemberRepositoryImpl memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

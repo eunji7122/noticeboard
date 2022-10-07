@@ -3,69 +3,19 @@ package com.project.noticeboard.Repository.post;
 import com.project.noticeboard.domain.post.Post;
 import com.project.noticeboard.domain.post.PostSearchCond;
 import com.project.noticeboard.domain.post.PostUpdateDto;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
-import static com.project.noticeboard.domain.post.QPost.post;
+public interface PostRepository {
 
-@Slf4j
-@Repository
-@Transactional
-public class PostRepository implements PostRepositoryImpl{
+    Post save(Post post);
 
-    private final EntityManager em;
-    private final JPAQueryFactory query;
+    void update(Long postId, PostUpdateDto updateParam);
 
-    public PostRepository(EntityManager em) {
-        this.em = em;
-        this.query = new JPAQueryFactory(em);
-    }
+    Optional<Post> findById(Long id);
 
-    @Override
-    public Post save(Post post) {
-        post.setRegistrationDate(LocalDate.now());
-        em.persist(post);
-        return post;
-    }
+    List<Post> findAll(PostSearchCond cond);
 
-    @Override
-    public void update(Long postId, PostUpdateDto updateParam) {
-        Post findPost = em.find(Post.class, postId);
-        findPost.setTitle(updateParam.getTitle());
-        findPost.setContent(updateParam.getContent());
-    }
-
-    @Override
-    public Optional<Post> findById(Long id) {
-        Post post = em.find(Post.class, id);
-        return Optional.ofNullable(post);
-    }
-
-    @Override
-    public List<Post> findAll(PostSearchCond cond) {
-        return query.select(post)
-                .from(post)
-                .where(likeTitle(cond.getTitle()))
-                .fetch();
-    }
-
-    @Override
-    public void delete(Long id) {
-        em.remove(findById(id).get());
-    }
-
-    private BooleanExpression likeTitle(String title) {
-        if (StringUtils.hasText(title)) {
-            return post.title.like("%" + title + "%");
-        }
-        return null;
-    }
+    void delete(Long id);
 }

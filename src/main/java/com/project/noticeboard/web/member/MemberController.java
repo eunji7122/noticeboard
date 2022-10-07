@@ -2,10 +2,9 @@ package com.project.noticeboard.web.member;
 
 import com.project.noticeboard.domain.member.Member;
 import com.project.noticeboard.domain.member.Role;
-import com.project.noticeboard.service.member.MemberServiceImpl;
+import com.project.noticeboard.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -23,7 +22,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberServiceImpl memberService;
+    private final MemberService memberService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/signup")

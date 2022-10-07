@@ -1,12 +1,10 @@
 package com.project.noticeboard.service.auth;
 
-import com.project.noticeboard.Repository.member.MemberRepositoryImpl;
+import com.project.noticeboard.Repository.member.MemberRepository;
 import com.project.noticeboard.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final MemberRepositoryImpl memberRepository;
+    private final MemberRepository memberRepository;
 
     private final AuthenticationManager authenticationManager;
 
